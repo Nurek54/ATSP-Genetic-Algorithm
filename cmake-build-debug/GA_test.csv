@@ -1,0 +1,3 @@
+Algorithm,PopulationSize,CrossoverRate,MutationRate,CrossoverMethod,MutationMethod,SelectionMethod,MaxGenerations,Seconds,Milliseconds,BestCost,BestSolution
+GeneticAlgorithm,500,0.8,0.01,PMX,insert,tournament,500,1.41165,1411.65,1864,21->40->47->26->20->38->37->18->17->13->34->46->36->14->35->16->45->39->19->44->15->23->12->32->7->31->3->24->4->29->30->5->6->8->11->10->0->25->1->9->33->27->28->2->41->43->42->22
+GeneticAlgorithm,500,0.8,0.01,PMX,insert,tournament,500,1.609,1609,1904,46->36->35->14->15->45->16->18->17->13->34->23->12->32->7->31->30->5->6->24->4->29->3->8->11->10->9->33->27->28->2->41->43->42->22->44->19->39->21->40->20->38->37->0->25->47->26->1

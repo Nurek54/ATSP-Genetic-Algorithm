@@ -1,0 +1,29 @@
+# Ogólne ustawienia
+algorithm = genetic        # Dostępne: annealing, tabu, genetic
+algorithm_runs = 1        # Liczba powtórzeń
+
+matrix_file = ftv47.atsp   # Plik z macierzą kosztów
+neighborhood_type = insert
+time_limit = 60
+max_iterations = 1000000
+
+# Parametry dla Symulowanego Wyżarzania
+cooling_rate = 0.97
+initial_temperature = auto
+
+# Parametry dla Tabu Search
+tabu_tenure = 70
+
+# Parametry dla Algorytmu Genetycznego (GA)
+population_size = 500      # Rozmiar populacji (np. 50, 100, 200)
+crossover_rate = 0.8       # Współczynnik krzyżowania (np. 0.6, 0.8, 0.9)
+mutation_rate = 0.01       # Współczynnik mutacji (np. 0.01, 0.05, 0.1)
+crossover_method = PMX     # Metoda krzyżowania: PMX, OX
+mutation_method = insert     # Metoda mutacji: swap, insert, reverse
+selection_method = tournament # Metoda selekcji rodziców: tournament, roulette
+max_generations = 500      # Maksymalna liczba generacji (np. 500, 1000, 2000)
+
+# Parametry logowania
+log_file = test.csv        # Ścieżka do pliku, gdzie zostaną zapisane wyniki
+
+
