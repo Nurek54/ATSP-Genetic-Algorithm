@@ -1,8 +1,6 @@
 #include <iostream>
 #include "ConfigReader.h"
 #include "TSPInstance.h"
-#include "SimulatedAnnealing.h"
-#include "TabuSearch.h"
 #include "GeneticAlgorithm.h"
 
 using namespace std;
@@ -34,56 +32,7 @@ int main(int argc, char** argv) {
     for (int run = 0; run < algorithmRuns; ++run) {
         cout << "[INFO] Uruchomienie algorytmu, iteracja: " << (run + 1) << "/" << algorithmRuns << endl;
 
-        if (selectedAlgorithm == "annealing") {
-            cout << "[INFO] Uruchamianie Symulowanego Wyzarzania (SA)..." << endl;
-
-            double coolRate = config.getCoolingRate();
-            double initialTemp = 0.0;
-            string initialTempStr = config.getInitialTemperature();
-            if (initialTempStr == "auto") {
-                initialTemp = -1.0;
-            } else {
-                try {
-                    initialTemp = stod(initialTempStr);
-                } catch (const invalid_argument& e) {
-                    cerr << "Nieprawidlowa wartosc initial_temperature. Uzycie domyslnej wartosci 0.0.\n";
-                    initialTemp = 0.0;
-                }
-            }
-            string moveType = config.getNeighborhoodType();
-            int maxIter = config.getMaxIterations();
-
-            SimulatedAnnealing sa(instance.getCostMatrix(),
-                                  instance.getCityCount(),
-                                  initialTemp,
-                                  coolRate,
-                                  timeLimitSec,
-                                  maxIter,
-                                  moveType,
-                                  logFile);
-
-            sa.run();
-            cout << "Najlepszy koszt (SA): " << sa.retrieveBestCost() << endl;
-
-        } else if (selectedAlgorithm == "tabu") {
-            cout << "[INFO] Uruchamianie Tabu Search..." << endl;
-
-            int tabuTenure = config.getTabuTenure();
-            int maxIter = config.getMaxIterations();
-            string moveType = config.getNeighborhoodType();
-
-            TabuSearch ts(instance.getCostMatrix(),
-                          instance.getCityCount(),
-                          timeLimitSec,
-                          tabuTenure,
-                          maxIter,
-                          moveType,
-                          logFile);
-
-            ts.run();
-            cout << "Najlepszy koszt (Tabu): " << ts.retrieveBestCost() << endl;
-
-        } else if (selectedAlgorithm == "genetic") {
+        if (selectedAlgorithm == "genetic") {
             cout << "[INFO] Uruchamianie Algorytmu Genetycznego (GA)..." << endl;
 
             // Parametry algorytmu genetycznego

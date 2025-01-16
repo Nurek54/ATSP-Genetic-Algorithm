@@ -79,20 +79,8 @@ build CMakeFiles/PEA_IV.dir/TSPUtilities.cpp.obj: CXX_COMPILER__PEA_IV_unscanned
   OBJECT_DIR = CMakeFiles\PEA_IV.dir
   OBJECT_FILE_DIR = CMakeFiles\PEA_IV.dir
 
-build CMakeFiles/PEA_IV.dir/SimulatedAnnealing.cpp.obj: CXX_COMPILER__PEA_IV_unscanned_Debug C$:/Users/g_sie/OneDrive/Pulpit/PEA_IV/SimulatedAnnealing.cpp || cmake_object_order_depends_target_PEA_IV
-  DEP_FILE = CMakeFiles\PEA_IV.dir\SimulatedAnnealing.cpp.obj.d
-  FLAGS = -g -std=gnu++23 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\PEA_IV.dir
-  OBJECT_FILE_DIR = CMakeFiles\PEA_IV.dir
-
 build CMakeFiles/PEA_IV.dir/GeneticAlgorithm.cpp.obj: CXX_COMPILER__PEA_IV_unscanned_Debug C$:/Users/g_sie/OneDrive/Pulpit/PEA_IV/GeneticAlgorithm.cpp || cmake_object_order_depends_target_PEA_IV
   DEP_FILE = CMakeFiles\PEA_IV.dir\GeneticAlgorithm.cpp.obj.d
-  FLAGS = -g -std=gnu++23 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\PEA_IV.dir
-  OBJECT_FILE_DIR = CMakeFiles\PEA_IV.dir
-
-build CMakeFiles/PEA_IV.dir/TabuSearch.cpp.obj: CXX_COMPILER__PEA_IV_unscanned_Debug C$:/Users/g_sie/OneDrive/Pulpit/PEA_IV/TabuSearch.cpp || cmake_object_order_depends_target_PEA_IV
-  DEP_FILE = CMakeFiles\PEA_IV.dir\TabuSearch.cpp.obj.d
   FLAGS = -g -std=gnu++23 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\PEA_IV.dir
   OBJECT_FILE_DIR = CMakeFiles\PEA_IV.dir
@@ -105,7 +93,7 @@ build CMakeFiles/PEA_IV.dir/TabuSearch.cpp.obj: CXX_COMPILER__PEA_IV_unscanned_D
 #############################################
 # Link the executable PEA_IV.exe
 
-build PEA_IV.exe: CXX_EXECUTABLE_LINKER__PEA_IV_Debug CMakeFiles/PEA_IV.dir/main.cpp.obj CMakeFiles/PEA_IV.dir/SaveToCSV.cpp.obj CMakeFiles/PEA_IV.dir/ConfigReader.cpp.obj CMakeFiles/PEA_IV.dir/TSPInstance.cpp.obj CMakeFiles/PEA_IV.dir/TSPUtilities.cpp.obj CMakeFiles/PEA_IV.dir/SimulatedAnnealing.cpp.obj CMakeFiles/PEA_IV.dir/GeneticAlgorithm.cpp.obj CMakeFiles/PEA_IV.dir/TabuSearch.cpp.obj
+build PEA_IV.exe: CXX_EXECUTABLE_LINKER__PEA_IV_Debug CMakeFiles/PEA_IV.dir/main.cpp.obj CMakeFiles/PEA_IV.dir/SaveToCSV.cpp.obj CMakeFiles/PEA_IV.dir/ConfigReader.cpp.obj CMakeFiles/PEA_IV.dir/TSPInstance.cpp.obj CMakeFiles/PEA_IV.dir/TSPUtilities.cpp.obj CMakeFiles/PEA_IV.dir/GeneticAlgorithm.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\PEA_IV.dir

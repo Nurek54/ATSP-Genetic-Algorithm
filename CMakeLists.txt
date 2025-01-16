@@ -8,7 +8,6 @@ add_executable(PEA_IV main.cpp
         ConfigReader.cpp
         TSPInstance.cpp
         TSPUtilities.cpp
-        SimulatedAnnealing.cpp
         GeneticAlgorithm.cpp
         GeneticAlgorithm.h
-        TabuSearch.cpp)
+)

@@ -98,7 +98,7 @@ const char* ConfigReader::getValue(const string& key) const {
 // Metody ogólne
 string ConfigReader::getAlgorithm() const {
     const char* value = getValue("algorithm");
-    return value != nullptr ? string(value) : "annealing";
+    return value != nullptr ? string(value) : "genetic";
 }
 
 int ConfigReader::getAlgorithmRuns() const {
@@ -119,28 +119,6 @@ int ConfigReader::getTimeLimit() const {
 string ConfigReader::getLogFile() const {
     const char* value = getValue("log_file");
     return value != nullptr ? string(value) : "results.csv";
-}
-
-// Parametry dla Symulowanego Wyżarzania
-double ConfigReader::getCoolingRate() const {
-    const char* value = getValue("cooling_rate");
-    return value != nullptr ? atof(value) : 0.97;
-}
-
-string ConfigReader::getInitialTemperature() const {
-    const char* value = getValue("initial_temperature");
-    return value != nullptr ? string(value) : "auto";
-}
-
-string ConfigReader::getNeighborhoodType() const {
-    const char* value = getValue("neighborhood_type");
-    return value != nullptr ? string(value) : "swap";
-}
-
-// Parametry dla Tabu Search
-int ConfigReader::getTabuTenure() const {
-    const char* value = getValue("tabu_tenure");
-    return value != nullptr ? atoi(value) : 7;
 }
 
 int ConfigReader::getMaxIterations() const {

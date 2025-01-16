@@ -163,7 +163,7 @@ int GeneticAlgorithm::calculateCost(const int* solution) const {
 
 // Selekcja rodziców (Turniejowa)
 void GeneticAlgorithm::selectParents(int& parent1Idx, int& parent2Idx) {
-    int tournamentSize = 10;
+    int tournamentSize = 5;
     auto selectOne = [&]() {
         int bestIdx = rand() % populationSize;
         for (int i = 1; i < tournamentSize; ++i) {
