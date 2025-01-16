@@ -12,20 +12,34 @@
 using namespace std;
 
 // Konstruktor
-GeneticAlgorithm::GeneticAlgorithm(const int* const* distanceMatrix, int cityCount, int populationSize,
-                                   double crossoverRate, double mutationRate, const string& crossoverMethod,
-                                   const string& mutationMethod, const string& selectionMethod,
-                                   int maxGenerations, int timeLimit, const string& logFile)
-        : distanceMatrix(distanceMatrix), cityCount(cityCount), populationSize(populationSize),
-          crossoverRate(crossoverRate), mutationRate(mutationRate), crossoverMethod(crossoverMethod),
-          mutationMethod(mutationMethod), selectionMethod(selectionMethod), maxGenerations(maxGenerations),
+GeneticAlgorithm::GeneticAlgorithm(const int* const* distanceMatrix,
+                                   int cityCount,
+                                   int populationSize,
+                                   double crossoverRate,
+                                   double mutationRate,
+                                   const string& crossoverMethod,
+                                   const string& mutationMethod,
+                                   const string& selectionMethod,
+                                   int maxGenerations,
+                                   int timeLimit,
+                                   const string& /*logFile*/)
+        : distanceMatrix(distanceMatrix),
+          cityCount(cityCount),
+          populationSize(populationSize),
+          crossoverRate(crossoverRate),
+          mutationRate(mutationRate),
+          crossoverMethod(crossoverMethod),
+          mutationMethod(mutationMethod),
+          selectionMethod(selectionMethod),
+          maxGenerations(maxGenerations),
           timeLimit(timeLimit) {
 
-    // Alokacja pamięci
+    // Alokacja pamięci na populację
     population = new int*[populationSize];
     for (int i = 0; i < populationSize; ++i) {
         population[i] = new int[cityCount];
     }
+
     fitness = new int[populationSize];
     bestSolution = new int[cityCount];
     bestCost = INT32_MAX;
@@ -51,9 +65,11 @@ void GeneticAlgorithm::initializePopulation() {
     srand(static_cast<unsigned>(time(nullptr)));
 
     for (int i = 0; i < populationSize; ++i) {
+        // Wypełnij permutację 0..(cityCount-1)
         for (int j = 0; j < cityCount; ++j) {
             population[i][j] = j;
         }
+        // Tasowanie - Fisher-Yates
         for (int j = cityCount - 1; j > 0; --j) {
             int k = rand() % (j + 1);
             Utilities::customSwap(population[i][j], population[i][k]);
@@ -61,7 +77,7 @@ void GeneticAlgorithm::initializePopulation() {
     }
 }
 
-// Kopiowanie rozwiązania
+// Kopiowanie rozwiązania (osobnika)
 void GeneticAlgorithm::copyIndividual(const int* source, int* destination) {
     for (int i = 0; i < cityCount; ++i) {
         destination[i] = source[i];
@@ -72,6 +88,7 @@ void GeneticAlgorithm::copyIndividual(const int* source, int* destination) {
 void GeneticAlgorithm::evaluatePopulation() {
     for (int i = 0; i < populationSize; ++i) {
         fitness[i] = calculateCost(population[i]);
+        // Aktualizacja najlepszego kosztu i rozwiązania globalnie
         if (fitness[i] < bestCost) {
             bestCost = fitness[i];
             copyIndividual(population[i], bestSolution);
@@ -107,8 +124,12 @@ void GeneticAlgorithm::selectParents(int& parent1Idx, int& parent2Idx) {
     parent2Idx = selectOne();
 }
 
-// Krzyżowanie
-void GeneticAlgorithm::crossover(const int* parent1, const int* parent2, int* offspring1, int* offspring2) {
+// Krzyżowanie – wywołanie konkretnej metody w zależności od crossoverMethod
+void GeneticAlgorithm::crossover(const int* parent1,
+                                 const int* parent2,
+                                 int* offspring1,
+                                 int* offspring2) {
+    // W zależności od nazwy metody krzyżowania
     if (crossoverMethod == "PMX") {
         performPMXCrossover(parent1, parent2, offspring1, offspring2);
     } else if (crossoverMethod == "OX") {
@@ -116,7 +137,7 @@ void GeneticAlgorithm::crossover(const int* parent1, const int* parent2, int* of
     }
 }
 
-// Mutacja
+// Mutacja – wywołanie konkretnej metody w zależności od mutationMethod
 void GeneticAlgorithm::mutate(int* individual) {
     if (mutationMethod == "swap") {
         performSwapMutation(individual);
@@ -127,8 +148,11 @@ void GeneticAlgorithm::mutate(int* individual) {
     }
 }
 
-// PMX Krzyżowanie
-void GeneticAlgorithm::performPMXCrossover(const int* parent1, const int* parent2, int* offspring1, int* offspring2) {
+// Krzyżowanie PMX
+void GeneticAlgorithm::performPMXCrossover(const int* parent1,
+                                           const int* parent2,
+                                           int* offspring1,
+                                           int* offspring2) {
     int start = rand() % cityCount;
     int end = start + rand() % (cityCount - start);
 
@@ -137,6 +161,7 @@ void GeneticAlgorithm::performPMXCrossover(const int* parent1, const int* parent
         offspring2[i] = -1;
     }
 
+    // Skopiuj segment
     for (int i = start; i <= end; ++i) {
         offspring1[i] = parent1[i];
         offspring2[i] = parent2[i];
@@ -144,7 +169,9 @@ void GeneticAlgorithm::performPMXCrossover(const int* parent1, const int* parent
 
     auto fillOffspring = [&](const int* parent, int* offspring) {
         for (int i = 0; i < cityCount; ++i) {
+            // Jeśli gen nie jest w skopiowanym segmencie
             if (!Utilities::isInSegment(offspring, start, end, parent[i])) {
+                // Znajdź pierwsze wolne miejsce (=-1)
                 for (int j = 0; j < cityCount; ++j) {
                     if (offspring[j] == -1) {
                         offspring[j] = parent[i];
@@ -159,11 +186,15 @@ void GeneticAlgorithm::performPMXCrossover(const int* parent1, const int* parent
     fillOffspring(parent1, offspring2);
 }
 
-// OX Krzyżowanie
-void GeneticAlgorithm::performOrderCrossover(const int* parent1, const int* parent2, int* offspring1, int* offspring2) {
+// Krzyżowanie OX
+void GeneticAlgorithm::performOrderCrossover(const int* parent1,
+                                             const int* parent2,
+                                             int* offspring1,
+                                             int* offspring2) {
     int start = rand() % cityCount;
     int end = start + rand() % (cityCount - start);
 
+    // Skopiowanie fragmentu
     for (int i = start; i <= end; ++i) {
         offspring1[i] = parent1[i];
         offspring2[i] = parent2[i];
@@ -184,7 +215,7 @@ void GeneticAlgorithm::performOrderCrossover(const int* parent1, const int* pare
     fillOffspring(parent1, offspring2);
 }
 
-// Reverse Mutacja
+// Reverse mutacja
 void GeneticAlgorithm::performReverseMutation(int* individual) {
     // Oblicz koszty krawędzi wychodzących
     double* edgeCosts = new double[cityCount];
@@ -196,34 +227,33 @@ void GeneticAlgorithm::performReverseMutation(int* individual) {
         totalCost += edgeCosts[i];
     }
 
-    // Oblicz prawdopodobieństwa
+    // Oblicz prawdopodobieństwa wylosowania poszczególnych krawędzi
     double* probabilities = new double[cityCount];
     for (int i = 0; i < cityCount; ++i) {
         probabilities[i] = edgeCosts[i] / totalCost;
     }
 
-    // Wybierz dwa indeksy na podstawie prawdopodobieństwa
+    // Wybierz dwa indeksy na podstawie rozkładu prawdopodobieństwa
     int start = selectIndexBasedOnProbability(probabilities, cityCount);
     int end = selectIndexBasedOnProbability(probabilities, cityCount);
 
-    // Jeśli indeksy są w odwrotnej kolejności, zamień je
+    // Uporządkuj, by start <= end
     if (start > end) {
         int temp = start;
         start = end;
         end = temp;
     }
 
-    // Odwróć segment
+    // Odwróć fragment
     Utilities::reverseSegment(individual, start, end);
 
-    // Zwalnianie pamięci
+    // Zwolnij pamięć
     delete[] edgeCosts;
     delete[] probabilities;
 }
 
-// Swap Mutacja
+// Swap mutacja
 void GeneticAlgorithm::performSwapMutation(int* individual) {
-    // Oblicz koszty krawędzi wychodzących
     double* edgeCosts = new double[cityCount];
     double totalCost = 0.0;
 
@@ -233,79 +263,57 @@ void GeneticAlgorithm::performSwapMutation(int* individual) {
         totalCost += edgeCosts[i];
     }
 
-    // Oblicz prawdopodobieństwa
     double* probabilities = new double[cityCount];
     for (int i = 0; i < cityCount; ++i) {
         probabilities[i] = edgeCosts[i] / totalCost;
     }
 
-    // Wybierz dwa indeksy na podstawie prawdopodobieństwa
     int i = selectIndexBasedOnProbability(probabilities, cityCount);
     int j = selectIndexBasedOnProbability(probabilities, cityCount);
 
-    // Jeśli wybrano te same indeksy, zakończ mutację
-    if (i == j) {
-        delete[] edgeCosts;
-        delete[] probabilities;
-        return;
+    // Jeśli wylosowano te same indeksy, nie wykonuj mutacji
+    if (i != j) {
+        Utilities::customSwap(individual[i], individual[j]);
     }
 
-    // Zamień wybrane elementy
-    Utilities::customSwap(individual[i], individual[j]);
-
-    // Zwalnianie pamięci
     delete[] edgeCosts;
     delete[] probabilities;
 }
 
+// Insert mutacja
 void GeneticAlgorithm::performInsertMutation(int* individual) {
-    // Utwórz dynamiczną tablicę do przechowywania kosztów krawędzi wychodzących
     double* edgeCosts = new double[cityCount];
     double totalCost = 0.0;
 
-    // Oblicz koszty krawędzi wychodzących
     for (int i = 0; i < cityCount; ++i) {
         int next = (i + 1) % cityCount;
         edgeCosts[i] = distanceMatrix[individual[i]][individual[next]];
         totalCost += edgeCosts[i];
     }
 
-    // Oblicz prawdopodobieństwa
     double* probabilities = new double[cityCount];
     for (int i = 0; i < cityCount; ++i) {
         probabilities[i] = edgeCosts[i] / totalCost;
     }
 
-    // Wybierz indeks na podstawie prawdopodobieństwa
     int i = selectIndexBasedOnProbability(probabilities, cityCount);
-
-    // Wybierz losowe miejsce wstawienia
     int j = rand() % cityCount;
 
-    // Jeśli pozycje są takie same, zakończ mutację
-    if (i == j) {
-        delete[] edgeCosts;
-        delete[] probabilities;
-        return;
+    if (i != j) {
+        int value = individual[i];
+
+        if (i < j) {
+            for (int k = i; k < j; ++k) {
+                individual[k] = individual[k + 1];
+            }
+        } else {
+            for (int k = i; k > j; --k) {
+                individual[k] = individual[k - 1];
+            }
+        }
+        individual[j] = value;
     }
 
-    int value = individual[i]; // Wartość do wstawienia
-
-    // Przesuń elementy w odpowiednim kierunku
-    if (i < j) {
-        for (int k = i; k < j; ++k) {
-            individual[k] = individual[k + 1];
-        }
-    } else {
-        for (int k = i; k > j; --k) {
-            individual[k] = individual[k - 1];
-        }
-    }
-
-    // Wstaw element w nowe miejsce
-    individual[j] = value;
-
-    // Zwalnianie pamięci dynamicznej
     delete[] edgeCosts;
     delete[] probabilities;
 }
@@ -321,7 +329,7 @@ int GeneticAlgorithm::selectIndexBasedOnProbability(const double* probabilities,
             return i;
         }
     }
-    return size - 1; // W razie błędu wybierz ostatni indeks
+    return size - 1; // Jeśli coś poszło nie tak, ostatni indeks
 }
 
 // Uruchomienie algorytmu
@@ -329,39 +337,73 @@ void GeneticAlgorithm::run() {
     // Start pomiaru czasu
     auto startTime = chrono::high_resolution_clock::now();
 
+    // Inicjalizacja populacji
     initializePopulation();
     evaluatePopulation();
 
     for (int generation = 0; generation < maxGenerations; ++generation) {
+        // Sprawdzenie limitu czasu
+        auto currentTime = chrono::high_resolution_clock::now();
+        auto elapsedSeconds = chrono::duration_cast<chrono::seconds>(currentTime - startTime).count();
+        if (elapsedSeconds >= timeLimit) {
+            cout << "[TIME LIMIT REACHED] Przekroczono limit czasu " << timeLimit << "s." << endl;
+            break;
+        }
+
         int** newPopulation = new int*[populationSize];
         for (int i = 0; i < populationSize; ++i) {
             newPopulation[i] = new int[cityCount];
         }
 
+        // Tworzenie nowej populacji
         for (int i = 0; i < populationSize; i += 2) {
+            // Selekcja rodziców
             int parent1Idx, parent2Idx;
             selectParents(parent1Idx, parent2Idx);
 
-            crossover(population[parent1Idx], population[parent2Idx], newPopulation[i], newPopulation[i + 1]);
-            mutate(newPopulation[i]);
-            mutate(newPopulation[i + 1]);
+            // Zamiast zawsze krzyżować - losowe sprawdzenie z crossoverRate
+            if (((double)rand() / RAND_MAX) < crossoverRate) {
+                crossover(population[parent1Idx], population[parent2Idx],
+                          newPopulation[i], newPopulation[i + 1]);
+            } else {
+                // Jeśli nie ma krzyżowania, potomki to kopie rodziców
+                copyIndividual(population[parent1Idx], newPopulation[i]);
+                if ((i + 1) < populationSize) {
+                    copyIndividual(population[parent2Idx], newPopulation[i + 1]);
+                }
+            }
+
+            // Mutacja dla nowo utworzonych osobników z mutationRate
+            if (((double)rand() / RAND_MAX) < mutationRate) {
+                mutate(newPopulation[i]);
+            }
+            // Drugi osobnik w parze (jeśli istnieje)
+            if ((i + 1) < populationSize && ((double)rand() / RAND_MAX) < mutationRate) {
+                mutate(newPopulation[i + 1]);
+            }
         }
 
+        // Usuwamy starą populację z pamięci
         freePopulation();
         population = newPopulation;
 
+        // Oceniamy nową populację
         evaluatePopulation();
-        cout << "Generacja " << generation + 1 << ", Najlepszy koszt: " << bestCost << endl;
+
+        cout << "Generacja " << (generation + 1)
+             << ", Najlepszy koszt: " << bestCost
+             << ", czas [s]: " << elapsedSeconds
+             << endl;
     }
 
     // Zakończenie pomiaru czasu
     auto endTime = chrono::high_resolution_clock::now();
 
-    // Oblicz czas wykonania
-    chrono::duration<double> durationInSeconds = endTime - startTime;
-    chrono::duration<double, milli> durationInMilliseconds = endTime - startTime;
+    // Obliczanie czasu wykonania
+    auto durationInSeconds = chrono::duration<double>(endTime - startTime);
+    auto durationInMilliseconds = chrono::duration<double, milli>(endTime - startTime);
 
-    // Zapis wyników i parametrów do pliku CSV
+    // Zapis wyników (jeśli potrzebne)
     SaveToCSV logger("GA_test.csv");
     logger.saveGeneticAlgorithmResults(
             "GeneticAlgorithm",
@@ -380,11 +422,12 @@ void GeneticAlgorithm::run() {
     );
 }
 
-// Wynik
+// Zwraca najlepszy koszt
 int GeneticAlgorithm::getBestCost() const {
     return bestCost;
 }
 
+// Zwraca najlepsze rozwiązanie
 const int* GeneticAlgorithm::getBestSolution() const {
     return bestSolution;
 }
