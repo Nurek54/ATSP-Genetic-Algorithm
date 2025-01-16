@@ -17,26 +17,29 @@ public:
 
 private:
     // Parametry algorytmu
-    const int* const* distanceMatrix;  // Macierz odległości
+    const int* const* distanceMatrix;  // Macierz odległości (alokowana gdzieś poza klasą)
     int cityCount;                     // Liczba miast
     int populationSize;                // Rozmiar populacji
     double crossoverRate;              // Współczynnik krzyżowania
     double mutationRate;               // Współczynnik mutacji
-    std::string crossoverMethod;       // Wybrana metoda krzyżowania (PMX, OX)
-    std::string mutationMethod;        // Wybrana metoda mutacji (swap, reverse)
-    std::string selectionMethod;       // Wybrana metoda selekcji (tournament, roulette)
+    std::string crossoverMethod;       // Wybrana metoda krzyżowania (np. PMX, OX)
+    std::string mutationMethod;        // Wybrana metoda mutacji (np. swap, reverse, insert)
+    std::string selectionMethod;       // Wybrana metoda selekcji (np. tournament, roulette)
     int maxGenerations;                // Maksymalna liczba generacji
-    int timeLimit;                     // Limit czasu wykonania algorytmu
+    int timeLimit;                     // Limit czasu wykonania algorytmu (w sekundach)
 
     // Dane populacji
-    int** population;                  // Populacja (tablica dynamiczna)
-    int* fitness;                      // Koszty rozwiązań w populacji
-    int* bestSolution;                 // Najlepsze znalezione rozwiązanie
+    int** population;                  // Populacja (tablica dynamiczna int*[populationSize])
+    int* fitness;                      // Koszty rozwiązań w populacji (int[populationSize])
+    int* bestSolution;                 // Najlepsze znalezione rozwiązanie (int[cityCount])
     int bestCost;                      // Koszt najlepszego rozwiązania
 
     // Inicjalizacja i ewaluacja populacji
     void initializePopulation();
     void evaluatePopulation();
+
+    // Nearest Neighbor (losowe miasto startowe)
+    void createRandomNearestNeighborSolution(int* solution);
 
     // Metody związane z algorytmem genetycznym
     void selectParents(int& parent1Idx, int& parent2Idx); // Selekcja rodziców
@@ -52,10 +55,9 @@ private:
     void performReverseMutation(int* individual);
     void performInsertMutation(int* individual);
 
-    int selectIndexBasedOnProbability(const double* probabilities, int size);
-
     // Metody pomocnicze
-    int calculateCost(const int* solution) const; // Obliczanie kosztu rozwiązania
+    int selectIndexBasedOnProbability(const double* probabilities, int size);
+    int calculateCost(const int* solution) const;    // Obliczanie kosztu trasy
     void copyIndividual(const int* source, int* destination); // Kopiowanie rozwiązania
     void freePopulation(); // Zwalnianie pamięci populacji
 };
