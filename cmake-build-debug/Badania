@@ -1,0 +1,4 @@
+Badania przeprowadzone dla:
+ftv47 -> 60 sek; cross PMX i OX rate: 0,8; mutacja insert rate: 0,01; populacja: 5*rozmiar (240), 10*rozmiar (480), 15*rozmiar (720)
+ftv170 -> 90 sek; cross PMX i OX rate: 0,8; mutacja insert rate: 0,01; populacja: 5*rozmiar (850), 10*rozmiar (1700), 15*rozmiar (2550)
+rbg403 -> 120 sek; cross PMX i OX rate: 0,8; mutacja insert rate: 0,01; populacja: 5*rozmiar (2015), 10*rozmiar (4030), 15*rozmiar (6045)

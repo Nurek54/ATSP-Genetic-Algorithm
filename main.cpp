@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // 2. Odczyt typu algorytmu ("annealing", "tabu", "genetic")
+    // 2. Odczyt typu algorytmu ("genetic")
     string selectedAlgorithm = config.getAlgorithm();
 
     // 3. Wczytywanie macierzy TSP

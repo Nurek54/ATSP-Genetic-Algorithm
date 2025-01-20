@@ -65,13 +65,8 @@ void GeneticAlgorithm::freePopulation() {
         population = nullptr;
     }
 }
-
-//--------------------------------------------------------------------------------------------
-// Metoda: createRandomNearestNeighborSolution
-// Tworzy ścieżkę metodą "losowy NN", tzn.:
-//  1) losowo wybieramy miasto startowe
-//  2) w każdej iteracji idziemy do najbliższego jeszcze nieodwiedzonego miasta
-//--------------------------------------------------------------------------------------------
+//losowo wybieramy miasto startowe
+//w każdej iteracji idziemy do najbliższego jeszcze nieodwiedzonego miasta
 void GeneticAlgorithm::createRandomNearestNeighborSolution(int* solution) {
     // Dynamiczna tablica bool odwiedzonych miast
     bool* visited = new bool[cityCount];
@@ -107,10 +102,6 @@ void GeneticAlgorithm::createRandomNearestNeighborSolution(int* solution) {
     delete[] visited; // Zwolnij tablicę visited
 }
 
-//--------------------------------------------------------------------------------------------
-// Inicjalizacja populacji: wypełniamy większość populacji losowo,
-// a jednego osobnika (indeks 0) metodą "random NN"
-//--------------------------------------------------------------------------------------------
 void GeneticAlgorithm::initializePopulation() {
     srand(static_cast<unsigned>(time(nullptr)));
 
@@ -409,8 +400,7 @@ void GeneticAlgorithm::run() {
             int parent1Idx, parent2Idx;
             selectParents(parent1Idx, parent2Idx);
 
-            // Krzyżowanie z prawdopodobieństwem crossoverRate
-            if (((double)rand() / RAND_MAX) < crossoverRate) {
+            if (((double)rand() / RAND_MAX) < crossoverRate && (i + 1) < populationSize) {
                 crossover(population[parent1Idx], population[parent2Idx],
                           newPopulation[i], newPopulation[i + 1]);
             } else {
@@ -427,6 +417,15 @@ void GeneticAlgorithm::run() {
             }
             if ((i + 1) < populationSize && ((double)rand() / RAND_MAX) < mutationRate) {
                 mutate(newPopulation[i + 1]);
+            }
+        }
+
+// Dla nieparzystego osobnika
+        if (populationSize % 2 == 1) {
+            int lastParentIdx = rand() % populationSize;
+            copyIndividual(population[lastParentIdx], newPopulation[populationSize - 1]);
+            if (((double)rand() / RAND_MAX) < mutationRate) {
+                mutate(newPopulation[populationSize - 1]);
             }
         }
 
@@ -450,7 +449,7 @@ void GeneticAlgorithm::run() {
     auto durationInMilliseconds = chrono::duration<double, milli>(endTime - startTime);
 
     // Zapis wyników (jeśli potrzebne)
-    SaveToCSV logger("GA_test.csv");
+    SaveToCSV logger("GA_rbg403_mutacje_i_krzyzowania.csv");
     logger.saveGeneticAlgorithmResults(
             "GeneticAlgorithm",
             populationSize,

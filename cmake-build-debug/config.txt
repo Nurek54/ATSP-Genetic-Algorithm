@@ -6,15 +6,16 @@ matrix_file = rbg403.atsp   # Plik z macierzą kosztów
 time_limit = 240
 max_iterations = 1000000
 
-population_size = 150      # Rozmiar populacji (np. 50, 100, 200)
-crossover_rate = 0.9       # Współczynnik krzyżowania (np. 0.6, 0.8, 0.9)
-mutation_rate = 0.1      # Współczynnik mutacji (np. 0.01, 0.05, 0.1)
+population_size = 4030      # Rozmiar populacji (np. 50, 100, 200)
+crossover_rate = 0.8       # Współczynnik krzyżowania (np. 0.6, 0.8, 0.9)
+mutation_rate = 0.01      # Współczynnik mutacji (np. 0.01, 0.05, 0.1)
 crossover_method = PMX     # Metoda krzyżowania: PMX, OX
 mutation_method = insert     # Metoda mutacji: swap, insert, reverse
 selection_method = tournament # Metoda selekcji rodziców: tournament, roulette (wykluczona)
-max_generations = 5000000      # Maksymalna liczba generacji (np. 500, 1000, 2000)
+max_generations = 9000000      # Maksymalna liczba generacji (np. 500, 1000, 2000)
 
 # Parametry logowania
 log_file = test.csv        # Ścieżka do pliku, gdzie zostaną zapisane wyniki
+
 
 
