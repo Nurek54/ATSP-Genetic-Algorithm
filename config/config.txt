@@ -1,0 +1,17 @@
+# ATSP: algorytm genetyczny
+
+algorithm = genetic             # dostepne: genetic
+algorithm_runs = 1              # liczba powtorzen
+
+matrix_file = ftv47.atsp        # plik TSPLIB, szukany w katalogu roboczym, potem w data/
+time_limit = 30                 # limit czasu jednego uruchomienia w sekundach
+
+population_size = 240           # rozmiar populacji (w badaniach 5, 10 i 15 razy liczba miast)
+crossover_rate = 0.8            # prawdopodobienstwo krzyzowania pary rodzicow
+mutation_rate = 0.01            # prawdopodobienstwo mutacji osobnika
+crossover_method = OX           # OX albo PMX
+mutation_method = insert        # swap / insert / reverse
+selection_method = tournament   # zawsze turniej o rozmiarze 5
+max_generations = 9000000       # maksymalna liczba generacji
+
+log_file = results.csv          # plik CSV, do ktorego dopisywane sa wyniki
